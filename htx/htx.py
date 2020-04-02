@@ -62,7 +62,7 @@ def _train():
     data = json.loads(request.data)
     tasks = data['tasks']
     project = data['project']
-    schema = data['schema']
+    schema = data.get('schema')
     params = data.get('params', {})
     if len(tasks) == 0:
         return jsonify({'status': 'error', 'message': 'No tasks found.'}), 400
@@ -76,7 +76,7 @@ def _train():
 def _setup():
     data = json.loads(request.data)
     project = data['project']
-    schema = data['schema']
+    schema = data.get('schema')
     logger.info(f'Request: setup for project {project}')
     model_version = _model_manager.setup(project, schema)
     response = {'model_version': model_version}

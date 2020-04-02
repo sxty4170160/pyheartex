@@ -90,11 +90,12 @@ class ModelManager(object):
 
     def _create_model_from_job_result(self, job_result, schema):
         resources = job_result['resources']
+        schema = schema or {}
         model = self.create_model_func(**schema)
         model.load(resources)
         return model
 
-    def setup(self, project, schema):
+    def setup(self, project, schema=None):
         if not hasattr(self, '_current_model'):
             # This ensures each subprocess loads its own copy of model to avoid pre-fork initializations
             self._current_model = {}
@@ -147,10 +148,6 @@ class ModelManager(object):
 
         if self._current_model.get(project) is None:
             # try to load model in lazy mode
-            if schema is None:
-                raise ValueError(f'You are trying to get prediction for project {project}, but model is not loaded. '
-                                 f'We can try to fix it, but you should specify valid "schema" field in request')
-
             # TODO: instead of just latest, here we can easily retrieve job result with requested model_version
             job_result = self._get_latest_job_result(project)
             if job_result is None:
@@ -198,6 +195,7 @@ class ModelManager(object):
         return job_result
 
     def update(self, task, project, schema, retrain, params):
+        schema = schema or {}
         model = self.create_model_func(**schema)
         data_item = model.get_data_item(task)
 
@@ -207,6 +205,7 @@ class ModelManager(object):
             return job
 
     def train(self, tasks, project, schema, params):
+        schema = schema or {}
         model = self.create_model_func(**schema)
         tasks_key = self.get_tasks_key(project)
         self._redis.delete(tasks_key)

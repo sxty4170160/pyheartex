@@ -48,8 +48,8 @@ class DataItem(object):
 
 class BaseModel(ABC):
 
-    INPUT_TYPES = None
-    OUTPUT_TYPES = None
+    INPUT_TYPES = ()
+    OUTPUT_TYPES = ()
 
     def __init__(self, input_names=None, output_names=None, input_values=None, input_types=None):
         self.input_names = input_names
