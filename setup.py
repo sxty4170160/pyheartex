@@ -11,7 +11,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='pyheartex',
-    version='0.0.5',
+    version='0.0.6',
     description='Deploying machine learning for Heartex or Label Studio',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -25,6 +25,12 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=requirements,
+    install_requires=[
+        'Flask==1.0.2',
+        'attrs==19.1.0',
+        'rq==1.0',
+        'numpy>=1.16.3',
+        'requests==2.22.0'
+    ],
     python_requires='>=3.6',
 )

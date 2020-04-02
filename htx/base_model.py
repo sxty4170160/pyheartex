@@ -73,9 +73,16 @@ class BaseModel(ABC):
                 inputs.append(task['data'].get(input_value))
         return inputs
 
-    @abstractmethod
     def get_output(self, task):
-        pass
+        if not isinstance(task.get('result'), Iterable):
+            return None
+
+        output = []
+        for r in task['result']:
+            if r['from_name'] in self.output_names and r['to_name'] in self.input_names:
+                output.append(r)
+
+        return output
 
     @classmethod
     def get_valid_schemas(cls, config_string):
